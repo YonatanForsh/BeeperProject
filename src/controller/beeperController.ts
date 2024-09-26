@@ -88,6 +88,15 @@ router.get("/status/:status", async (req: Request, res: Response): Promise<void>
 //update status
 router.put("/:id/status", async (req: Request, res: Response): Promise<void> => {   
     try {
+        if(!req.body.status){           
+            const resolt = await beeperService.moveBeeperStatus(req.params.id)
+            if (resolt) {
+                res.status(200).json(resolt)
+                return
+            } else {
+                throw new Error("Beepers not found")
+            }
+        }
         const { status } = req.body
         if(status == "deployed"){
             const { LAT, LON } = req.body

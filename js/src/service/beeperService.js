@@ -58,6 +58,21 @@ class beeperService {
         }
         return beeper;
     }
+    static async moveBeeperStatus(beeperId) {
+        let beepers = await (0, fileDataLayer_1.getFileData)("beeper");
+        if (!beepers)
+            beepers = [];
+        const beeper = beepers.find(p => p.id == beeperId);
+        if (beeper) {
+            const beeperIndex = statusesEnum_js_1.default.indexOf(beeper.status);
+            beeper.status = statusesEnum_js_1.default[beeperIndex + 1];
+            await (0, fileDataLayer_1.saveFileData)("beeper", beepers);
+        }
+        else {
+            return "invalid status";
+        }
+        return beeper;
+    }
     static async deployedBeeper(beeperId, status, lat, lon) {
         const statusIndex = statusesEnum_js_1.default.indexOf(status);
         const isValidStatus = statusesEnum_js_1.default.includes(status);

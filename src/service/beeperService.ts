@@ -73,6 +73,21 @@ export default class beeperService{
     }
 
 
+    public static async moveBeeperStatus(beeperId: string): Promise<Beeper|string|undefined>{
+        let beepers: Beeper[] = await getFileData<Beeper>("beeper") as Beeper[]
+        if (!beepers) beepers = []      
+        const beeper = beepers.find(p => p.id == beeperId)   
+        if(beeper) {
+            const beeperIndex:number = statusesList.indexOf(beeper.status)
+            beeper.status = statusesList[beeperIndex + 1]
+            await saveFileData("beeper", beepers)
+        } else {
+                return "invalid status"
+        }
+        return beeper
+    }
+
+
     public static async deployedBeeper(beeperId: string, status: string, lat: number, lon: number): Promise<Beeper|string|undefined>{
         const statusIndex:number = statusesList.indexOf(status)
         const isValidStatus:boolean = statusesList.includes(status)
