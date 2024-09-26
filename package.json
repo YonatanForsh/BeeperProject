@@ -1,9 +1,9 @@
 {
   "name": "beeperproject",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "/js/index.js",
   "scripts": {
-    "start": "nodemon .",
+    "start": "nodemon js/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
