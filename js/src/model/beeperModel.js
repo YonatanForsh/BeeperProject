@@ -9,7 +9,7 @@ class Beeper {
     constructor(name) {
         this.name = name;
         this.id = (0, uuid_1.v4)();
-        this.status = statusesEnum_1.default.manufactured;
+        this.status = statusesEnum_1.default[0];
         this.created_at = new Date();
         this.detonated_at = null;
         this.latitude = 0;

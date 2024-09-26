@@ -1,4 +1,4 @@
-import statusEnum from "../enum/statusesEnum"
+import statusesList from "../enum/statusesEnum"
 import { v4 } from "uuid"
 
 
@@ -13,7 +13,7 @@ export default class Beeper {
         public name: string
     ) {
         this.id = v4()
-        this.status = statusEnum.manufactured
+        this.status = statusesList[0]
         this.created_at = new Date()
         this.detonated_at = null
         this.latitude = 0

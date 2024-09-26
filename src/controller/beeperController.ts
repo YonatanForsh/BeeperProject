@@ -1,6 +1,6 @@
 import exp, { Router, Request, Response } from "express"
 import beeperService from "../service/beeperService"
-import statusEnum from "../enum/statusesEnum"
+import statusesList from "../enum/statusesEnum"
 
 
 const router: Router= exp.Router()
@@ -86,19 +86,24 @@ router.get("/status/:status", async (req: Request, res: Response): Promise<void>
 
 
 //update status
-router.put("/:id/status", async (req: Request, res: Response): Promise<void> => {
+router.put("/:id/status", async (req: Request, res: Response): Promise<void> => {   
     try {
         const { status } = req.body
         if(status == "deployed"){
             const { LAT, LON } = req.body
-            const resolt = await beeperService.bombBeeper()
-        }
-        const resolt = await beeperService.updateBeeperStatus(req.params.id)
+            const resolt = await beeperService.deployedBeeper(req.params.id, status, LAT, LON)
+            if (resolt) {
+                res.status(200).json(resolt)
+            } else {
+                throw new Error("Beepers not found")
+            }
+        } else {
+        const resolt = await beeperService.updateBeeperStatus(req.params.id, status)    
         if (resolt) {
             res.status(200).json(resolt)
         } else {
             throw new Error("Beepers not found")
-        }
+        }}
     } catch (err) {
         res.status(400).json({
             err: true,
@@ -107,6 +112,23 @@ router.put("/:id/status", async (req: Request, res: Response): Promise<void> => 
     }
 })
 
+
+//delete beeper
+router.delete("/:id", async (req: Request, res: Response): Promise<void> => {
+    try {
+        const resolt = await beeperService.deleteBeeper(req.params.id)
+        if (resolt) {
+            res.status(200).json(resolt)
+        } else {
+            throw new Error("Beeper deleted!")
+        }
+    } catch (err) {
+        res.status(400).json({
+            err: true,
+            Message: err || "Some Error"
+        })
+    }
+})
 
 
 export default router

@@ -91,14 +91,40 @@ router.put("/:id/status", async (req, res) => {
         const { status } = req.body;
         if (status == "deployed") {
             const { LAT, LON } = req.body;
-            const resolt = await beeperService_1.default.bombBeeper();
+            const resolt = await beeperService_1.default.deployedBeeper(req.params.id, status, LAT, LON);
+            if (resolt) {
+                res.status(200).json(resolt);
+            }
+            else {
+                throw new Error("Beepers not found");
+            }
         }
-        const resolt = await beeperService_1.default.updateBeeperStatus(req.params.id);
+        else {
+            const resolt = await beeperService_1.default.updateBeeperStatus(req.params.id, status);
+            if (resolt) {
+                res.status(200).json(resolt);
+            }
+            else {
+                throw new Error("Beepers not found");
+            }
+        }
+    }
+    catch (err) {
+        res.status(400).json({
+            err: true,
+            Message: err || "Some Error"
+        });
+    }
+});
+//delete beeper
+router.delete("/:id", async (req, res) => {
+    try {
+        const resolt = await beeperService_1.default.deleteBeeper(req.params.id);
         if (resolt) {
             res.status(200).json(resolt);
         }
         else {
-            throw new Error("Beepers not found");
+            throw new Error("Beeper deleted!");
         }
     }
     catch (err) {
